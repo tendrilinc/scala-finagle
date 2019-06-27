@@ -288,7 +288,7 @@
     </plugins>
   </build>
 
-  <distributionManagement>
+  <!--<distributionManagement>
     <repository>
       <id>bintray</id>
       <url>https://api.bintray.com/maven/opentracing/maven/opentracing-finagle/;publish=1</url>
@@ -297,7 +297,7 @@
       <id>jfrog-snapshots</id>
       <url>http://oss.jfrog.org/artifactory/oss-snapshot-local</url>
     </snapshotRepository>
-  </distributionManagement>
+  </distributionManagement>-->
 
   <profiles>
     <profile>
