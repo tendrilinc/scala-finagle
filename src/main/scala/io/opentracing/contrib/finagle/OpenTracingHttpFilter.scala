@@ -17,24 +17,30 @@ import java.util
 
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
-import com.twitter.util.{Future, Return, Throw}
+import com.twitter.util.{Future, Local, Return, Throw}
 import io.opentracing.propagation.Format
 import io.opentracing.tag.Tags
-import io.opentracing.{References, Tracer}
+import io.opentracing.util.GlobalTracer
+import io.opentracing.{References, Span, Tracer}
+import com.tendril.tracing.FutureTracing.localKey
+
+object OpenTracingHttpFilter {
+}
 
 /**
   * OpenTracing Http filter
   *
-  * @param tracer         OpenTracing tracer
+  * @param paramTracer         OpenTracing tracer
   * @param isServerFilter true if filter is applied to Server, false if applied to Client
   */
-class OpenTracingHttpFilter(tracer: Tracer, isServerFilter: Boolean) extends SimpleFilter[Request, Response] {
-
+class OpenTracingHttpFilter(var paramTracer: Tracer, isServerFilter: Boolean) extends SimpleFilter[Request, Response] {
   def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
 
-    val spanBuilder = tracer.buildSpan(request.method.name)
+    val tracer = if (paramTracer == null) GlobalTracer.get() else paramTracer
+
+    val spanBuilder = tracer.buildSpan("http.request")
       .withTag(Tags.COMPONENT.getKey, "finagle")
-      .withTag(Tags.HTTP_METHOD.getKey, request.method.name)
+      .withTag(Tags.HTTP_METHOD.getKey, request.method.toString)
       .withTag(Tags.HTTP_URL.getKey, request.uri)
 
     if (isServerFilter) {
@@ -52,13 +58,15 @@ class OpenTracingHttpFilter(tracer: Tracer, isServerFilter: Boolean) extends Sim
       new HeaderMapExtractAdapter(request.headerMap))
     if (parent != null) {
       spanBuilder.addReference(References.FOLLOWS_FROM, parent)
-    }
+    } else localKey().foreach(spanBuilder.asChildOf)
 
     val span = spanBuilder.start()
 
     tracer.inject(span.context(), Format.Builtin.HTTP_HEADERS,
       new HeaderMapInjectAdapter(request.headerMap))
 
+
+    localKey.set(Some(span))
     val future = service(request)
 
     future respond {

@@ -54,14 +54,21 @@
     <url>https://github.com/opentracing-contrib/scala-finagle/issues</url>
   </issueManagement>
 
+  <repositories>
+    <repository>
+      <id>oss.sonatype.org</id>
+      <name>sonatype sapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+  </repositories>
 
   <properties>
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
 
-    <scala.version>2.12.8</scala.version>
-    <opentracing.version>0.32.0</opentracing.version>
+    <scala.version>2.11.8</scala.version>
+    <opentracing.version>0.31.0</opentracing.version>
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
     <jacoco-maven-plugin.version>0.8.3</jacoco-maven-plugin.version>
   </properties>
@@ -75,8 +82,13 @@
 
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>finagle-http_2.12</artifactId>
-      <version>19.2.0</version>
+      <artifactId>finagle-http_2.11</artifactId>
+      <version>6.42.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.tendril</groupId>
+      <artifactId>scala-tracing-integration</artifactId>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>
@@ -90,7 +102,6 @@
       <groupId>io.opentracing</groupId>
       <artifactId>opentracing-util</artifactId>
       <version>${opentracing.version}</version>
-      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -102,7 +113,7 @@
 
     <dependency>
       <groupId>org.scalatest</groupId>
-      <artifactId>scalatest_2.12</artifactId>
+      <artifactId>scalatest_2.11</artifactId>
       <version>3.0.7</version>
       <scope>test</scope>
     </dependency>
