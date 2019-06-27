@@ -47,6 +47,11 @@ val response: Future[http.Response] = client(request)
 val result = Await.result(response)
 ```
 
+## Changes
+* Downgrade scala to 2.11 since that is what we use at Tendril
+* Propagate tracing info through Futures and Locals so we can get a full trace
+* Use the scala-tracing-integrations library to share tracing info around the program
+
 ## License
 
 [Apache 2.0 License](./LICENSE).
