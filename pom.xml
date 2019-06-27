@@ -149,7 +149,7 @@
           <scalaVersion>${scala.version}</scalaVersion>
         </configuration>
       </plugin>
-      <plugin>
+      <!--<plugin> Commented so we can use the other version in case jenkins cares
         <artifactId>maven-release-plugin</artifactId>
         <version>2.5.3</version>
         <configuration>
@@ -158,7 +158,7 @@
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <tagNameFormat>@{project.version}</tagNameFormat>
         </configuration>
-      </plugin>
+      </plugin>-->
       <plugin>
         <groupId>io.zipkin.centralsync-maven-plugin</groupId>
         <artifactId>centralsync-maven-plugin</artifactId>
@@ -243,6 +243,48 @@
           </execution>
         </executions>
       </plugin>
+      <!-- ============================================= -->
+      <!-- Artifactory Deployment Plugin (DO NOT USE IF  -->
+      <!-- YOU ARE USING THE JENKINS PLUGIN.  USE ONE    -->
+      <!-- OR THE OTHER.                                 -->
+      <!-- ============================================= -->
+      <plugin>
+        <groupId>org.jfrog.buildinfo</groupId>
+        <artifactId>artifactory-maven-plugin</artifactId>
+        <version>2.6.1</version>
+        <!--<inherited>false</inherited>-->
+        <executions>
+          <execution>
+            <id>build-info</id>
+            <goals>
+              <goal>publish</goal>
+            </goals>
+            <configuration>
+              <publisher>
+                <contextUrl>https://tendril.artifactoryonline.com/tendril</contextUrl>
+                <username>tendril-jenkins</username>
+                <password>${env.ARTIFACTORY_CREDS}</password>
+                <repoKey>libs-release-local</repoKey>
+                <snapshotRepoKey>libs-snapshot-local</snapshotRepoKey>
+              </publisher>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.4.2</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.scm</groupId>
+            <artifactId>maven-scm-provider-gitexe</artifactId>
+            <version>1.8.1</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
     </plugins>
   </build>
 
