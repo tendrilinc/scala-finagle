@@ -24,6 +24,8 @@ import io.opentracing.util.GlobalTracer
 import io.opentracing.{References, Span, Tracer}
 import com.tendril.tracing.FutureTracing.localKey
 
+import scala.util.{Failure, Success, Try}
+
 object OpenTracingHttpFilter {
 }
 
@@ -67,21 +69,31 @@ class OpenTracingHttpFilter(var paramTracer: Tracer, isServerFilter: Boolean) ex
 
 
     localKey.set(Some(span))
-    val future = service(request)
-
-    future respond {
-      case Return(reply) =>
-        span.setTag(Tags.HTTP_STATUS.getKey, reply.status.code)
-        span.finish()
-      case Throw(throwable) =>
+    Try(service(request)) match {
+      case Success(future) =>
+        future respond {
+          case Return(reply) =>
+            span.setTag(Tags.HTTP_STATUS.getKey, reply.status.code)
+            span.finish()
+          case Throw(throwable) =>
+            val exceptionLogs: util.Map[String, AnyRef] = new util.LinkedHashMap[String, AnyRef](2)
+            exceptionLogs.put("event", Tags.ERROR.getKey)
+            exceptionLogs.put("error.object", throwable)
+            span.log(exceptionLogs)
+            span.setTag(Tags.ERROR.getKey, true)
+            span.finish()
+        }
+        future
+      case Failure(e) =>
         val exceptionLogs: util.Map[String, AnyRef] = new util.LinkedHashMap[String, AnyRef](2)
         exceptionLogs.put("event", Tags.ERROR.getKey)
-        exceptionLogs.put("error.object", throwable)
+        exceptionLogs.put("error.object", e)
         span.log(exceptionLogs)
         span.setTag(Tags.ERROR.getKey, true)
         span.finish()
+        throw e
     }
 
-    future
+
   }
 }
