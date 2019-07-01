@@ -22,13 +22,13 @@
 
   <name>${project.groupId}:${project.artifactId}</name>
   <description>OpenTracing Instrumentation for Finagle</description>
-  <url>https://github.com/opentracing-contrib/scala-finagle</url>
+  <url>https://github.com/tendrilinc/scala-finagle</url>
   <inceptionYear>2017-2019</inceptionYear>
 
   <scm>
-    <url>http://github.com/opentracing-contrib/scala-finagle</url>
-    <connection>scm:git:https://github.com/opentracing-contrib/scala-finagle.git</connection>
-    <developerConnection>scm:git:https://github.com/opentracing-contrib/scala-finagle.git
+    <url>https://github.com/tendrilinc/scala-finagle</url>
+    <connection>scm:git:git@github.com:tendrilinc/scala-finagle.git</connection>
+    <developerConnection>scm:git:git@github.com:tendrilinc/scala-finagle.git
     </developerConnection>
     <tag>HEAD</tag>
   </scm>
@@ -54,13 +54,13 @@
     <url>https://github.com/opentracing-contrib/scala-finagle/issues</url>
   </issueManagement>
 
-  <repositories>
+  <!--<repositories>
     <repository>
       <id>oss.sonatype.org</id>
       <name>sonatype sapshots</name>
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </repository>
-  </repositories>
+  </repositories>-->
 
   <properties>
     <java.version>1.8</java.version>
@@ -88,7 +88,7 @@
     <dependency>
       <groupId>com.tendril</groupId>
       <artifactId>scala-tracing-integration</artifactId>
-      <version>1.0.1-SNAPSHOT</version>
+      <version>1.0.1</version>
     </dependency>
 
     <dependency>
