@@ -87,8 +87,8 @@
     </dependency>
     <dependency>
       <groupId>com.tendril</groupId>
-      <artifactId>scala-tracing-integration</artifactId>
-      <version>1.0.3</version>
+      <artifactId>jvm-tracing-integration</artifactId>
+      <version>1.0.0</version>
     </dependency>
 
     <dependency>
