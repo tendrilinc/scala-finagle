@@ -261,7 +261,7 @@
             </goals>
             <configuration>
               <publisher>
-                <contextUrl>https://tendril.artifactoryonline.com/tendril</contextUrl>
+                <contextUrl>https://tendril.jfrog.io/tendril</contextUrl>
                 <username>tendril-jenkins</username>
                 <password>${env.ARTIFACTORY_CREDS}</password>
                 <repoKey>libs-release-local</repoKey>
